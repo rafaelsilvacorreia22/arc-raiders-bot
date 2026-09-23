@@ -6,16 +6,16 @@ Posta automaticamente no canal `#speranza-bar` do Discord, via webhook (`ARC Rai
   - Todo dia às **19h05** (horário de Brasília)
   - Também aos **sábados e domingos às 14h20** (horário de Brasília)
   - Sempre apaga a mensagem de contagem anterior antes de postar a nova, pra não acumular várias no canal
-- **Notícias/patch notes oficiais** do ARC Raiders (só posts reais da Embark Studios na Steam — não pega matéria de imprensa/fansite tipo PlayGround.ru etc.)
+- **Notícias/patch notes oficiais** do ARC Raiders (só posts reais da Embark Studios na Steam  não pega matéria de imprensa/fansite tipo PlayGround.ru etc.)
   - Verifica a cada 30 minutos e posta só as que ainda não foram postadas
   - Traduzidas automaticamente para português do Brasil
-  - Rodando manualmente ("Run workflow" no GitHub), sempre traz a notícia oficial mais recente, mesmo que já tenha sido postada antes — útil pra testar ou forçar um post
+  - Rodando manualmente ("Run workflow" no GitHub), sempre traz a notícia oficial mais recente, mesmo que já tenha sido postada antes  útil pra testar ou forçar um post
 
 Roda 100% no GitHub Actions depois de configurado, funciona sozinho, sem precisar de nada ligado no computador de ninguém.
 
 ## Sobre Xbox e PSN
 
-A Steam tem uma API pública e gratuita de contagem de jogadores online, mas **Xbox Live e PSN não oferecem nenhuma API pública equivalente** para jogos de terceiros — só a própria Microsoft/Sony (ou o próprio estúdio, internamente) tem acesso a esse número. Não existe hoje uma forma confiável de puxar "jogadores ativos no Xbox/PSN" de fora sem inventar o dado. Por isso este bot traz apenas o número oficial da Steam, igual ao WARDOGS.
+A Steam tem uma API pública e gratuita de contagem de jogadores online, mas **Xbox Live e PSN não oferecem nenhuma API pública equivalente** para jogos de terceiros  só a própria Microsoft/Sony (ou o próprio estúdio, internamente) tem acesso a esse número. Não existe hoje uma forma confiável de puxar "jogadores ativos no Xbox/PSN" de fora sem inventar o dado. Por isso este bot traz apenas o número oficial da Steam, igual ao WARDOGS.
 
 ## Como funciona por baixo dos panos
 
