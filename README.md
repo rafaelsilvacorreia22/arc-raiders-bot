@@ -1,4 +1,4 @@
-# ARC Raiders Bot — Speranza Bar
+# ARC Raiders Bot Speranza Bar
 
 Posta automaticamente no canal `#speranza-bar` do Discord, via webhook (`ARC Raiders Stats`):
 
@@ -11,7 +11,7 @@ Posta automaticamente no canal `#speranza-bar` do Discord, via webhook (`ARC Rai
   - Traduzidas automaticamente para português do Brasil
   - Rodando manualmente ("Run workflow" no GitHub), sempre traz a notícia oficial mais recente, mesmo que já tenha sido postada antes — útil pra testar ou forçar um post
 
-Roda 100% no GitHub Actions — depois de configurado, funciona sozinho, sem precisar de nada ligado no computador de ninguém.
+Roda 100% no GitHub Actions depois de configurado, funciona sozinho, sem precisar de nada ligado no computador de ninguém.
 
 ## Sobre Xbox e PSN
 
@@ -41,13 +41,13 @@ Os horários evitam cair exatamente em hora cheia (ex: `22:00`), porque o GitHub
 
 ### 1. Repositório no GitHub
 
-Pode ser público ou privado — o Secret do webhook fica protegido de qualquer forma (esse repositório está **público**, visível no perfil do GitHub).
+Pode ser público ou privado  o Secret do webhook fica protegido de qualquer forma (esse repositório está **público**, visível no perfil do GitHub).
 
 ### 2. Subir os arquivos
 
 Pelo site do GitHub:
 - Pastas/arquivos comuns → **Add file → Upload files** (arrastar).
-- A pasta `.github/workflows` não sobe direito arrastando — para cada arquivo `.yml`, use **Add file → Create new file** e digite o caminho completo no nome (ex: `.github/workflows/arc-raiders-player-count.yml`), o GitHub cria as pastas sozinho.
+- A pasta `.github/workflows` não sobe direito arrastando  para cada arquivo `.yml`, use **Add file → Create new file** e digite o caminho completo no nome (ex: `.github/workflows/arc-raiders-player-count.yml`), o GitHub cria as pastas sozinho.
 
 ### 3. Configurar o Secret do webhook
 
@@ -55,7 +55,7 @@ Pelo site do GitHub:
 - Nome: `DISCORD_WEBHOOK_URL`
 - Valor: a URL do webhook "ARC Raiders Stats" (Discord → canal `speranza-bar` → Editar canal → Integrações → Webhooks)
 
-Trate essa URL como senha — quem tiver ela consegue postar no canal.
+Trate essa URL como senha  quem tiver ela consegue postar no canal.
 
 ### 4. Testar
 
