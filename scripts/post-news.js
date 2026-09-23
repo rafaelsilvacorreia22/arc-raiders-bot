@@ -26,23 +26,54 @@ function stripHtml(str) {
     .trim();
 }
 
-// traduz um texto (ingles) pra portugues do Brasil usando o endpoint publico e
-// gratuito do Google Translate (sem precisar de chave de API). Se falhar por
-// qualquer motivo, devolve o texto original em ingles em vez de quebrar o bot.
+// traduz um texto (ingles) pra portugues do Brasil. Tenta a MyMemory primeiro
+// (API publica e gratuita, sem chave, que funciona bem a partir de servidores
+// de nuvem como o GitHub Actions) e cai pro Google Translate (endpoint publico,
+// mas costuma ser bloqueado nesse tipo de servidor) como reserva. Se as duas
+// falharem por qualquer motivo, devolve o texto original em ingles em vez de
+// quebrar o bot.
+async function translateWithMyMemory(text) {
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|pt-BR`;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  const data = await res.json();
+  const translated = data?.responseData?.translatedText;
+  if (!translated || /MYMEMORY WARNING/i.test(translated)) return null;
+  return translated;
+}
+
+async function translateWithGoogle(text) {
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&dt=t&q=${encodeURIComponent(
+    text
+  )}`;
+  const res = await fetch(url, {
+    headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" },
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const translated = data[0].map((chunk) => chunk[0]).join("");
+  return translated || null;
+}
+
 async function translateToPtBr(text) {
   if (!text) return text;
+
   try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&dt=t&q=${encodeURIComponent(
-      text
-    )}`;
-    const res = await fetch(url);
-    if (!res.ok) return text;
-    const data = await res.json();
-    return data[0].map((chunk) => chunk[0]).join("");
+    const translated = await translateWithMyMemory(text);
+    if (translated) return translated;
   } catch (err) {
-    console.log("Falha ao traduzir, usando texto original:", err.message);
-    return text;
+    console.log("Falha ao traduzir com MyMemory:", err.message);
   }
+
+  try {
+    const translated = await translateWithGoogle(text);
+    if (translated) return translated;
+  } catch (err) {
+    console.log("Falha ao traduzir com Google Translate:", err.message);
+  }
+
+  console.log("Nao foi possivel traduzir, usando texto original em ingles.");
+  return text;
 }
 
 async function main() {
@@ -51,7 +82,7 @@ async function main() {
   }
 
   const res = await fetch(
-    `https://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=${APPID}&count=5&maxlength=600&format=json`
+    `https://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=${APPID}&count=5&maxlength=450&format=json`
   );
   if (!res.ok) {
     throw new Error(`Steam News API respondeu ${res.status}`);
@@ -95,8 +126,8 @@ async function main() {
       translateToPtBr(rawSummary),
     ]);
     const summary = translatedSummaryFull.slice(0, 500);
-    const content = `📰 **ARC Raiders — ${translatedTitle}**\n${summary}${
-      translatedSummaryFull.length > 500 ? "…" : ""
+    const content = `ðŸ“° **ARC Raiders â€” ${translatedTitle}**\n${summary}${
+      translatedSummaryFull.length > 500 ? "â€¦" : ""
     }\n${item.url}`;
 
     const postRes = await fetch(WEBHOOK_URL, {
@@ -113,7 +144,7 @@ async function main() {
     console.log("Postado:", item.title);
   }
 
-  state.postedGids = Array.from(posted).slice(-50); // guarda só os ultimos 50 ids
+  state.postedGids = Array.from(posted).slice(-50); // guarda sÃ³ os ultimos 50 ids
   saveState(state);
 }
 
