@@ -126,8 +126,8 @@ async function main() {
       translateToPtBr(rawSummary),
     ]);
     const summary = translatedSummaryFull.slice(0, 500);
-    const content = `ðŸ“° **ARC Raiders â€” ${translatedTitle}**\n${summary}${
-      translatedSummaryFull.length > 500 ? "â€¦" : ""
+    const content = `📰 **ARC Raiders — ${translatedTitle}**\n${summary}${
+      translatedSummaryFull.length > 500 ? "…" : ""
     }\n${item.url}`;
 
     const postRes = await fetch(WEBHOOK_URL, {
@@ -144,7 +144,7 @@ async function main() {
     console.log("Postado:", item.title);
   }
 
-  state.postedGids = Array.from(posted).slice(-50); // guarda sÃ³ os ultimos 50 ids
+  state.postedGids = Array.from(posted).slice(-50); // guarda só os ultimos 50 ids
   saveState(state);
 }
 
