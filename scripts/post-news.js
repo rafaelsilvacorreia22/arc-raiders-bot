@@ -121,13 +121,16 @@ async function main() {
 
   for (const item of itemsToPost) {
     const rawSummary = stripHtml(item.contents);
-    const [translatedTitle, translatedSummaryFull] = await Promise.all([
+    // corta o texto ANTES de traduzir (nao depois): a API gratuita do MyMemory
+    // recusa textos longos, e so mostramos um trecho no Discord mesmo, entao nao
+    // faz sentido mandar o texto inteiro pra traduzir
+    const summaryToTranslate = rawSummary.length > 480 ? rawSummary.slice(0, 480) : rawSummary;
+    const [translatedTitle, translatedSummary] = await Promise.all([
       translateToPtBr(item.title),
-      translateToPtBr(rawSummary),
+      translateToPtBr(summaryToTranslate),
     ]);
-    const summary = translatedSummaryFull.slice(0, 500);
-    const content = `📰 **ARC Raiders — ${translatedTitle}**\n${summary}${
-      translatedSummaryFull.length > 500 ? "…" : ""
+    const content = `📰 **ARC Raiders — ${translatedTitle}**\n${translatedSummary}${
+      rawSummary.length > 480 ? "…" : ""
     }\n${item.url}`;
 
     const postRes = await fetch(WEBHOOK_URL, {
